@@ -1,8 +1,8 @@
-.child-borders {
+/* .paper-btn {
   margin-right: 15vw;
-}
+} */
 
-.paper-container{
+.paper-container {
   margin: auto;
   width: 60%;
   border: 3px solid rgb(65 64 62);
@@ -16,10 +16,7 @@ body {
 }
 
 #trackingCard, #shoppingCard {
-  /* background-color: rgb(255, 245, 157); */
   background-image: url("../imgs/notepadImg.png");
-  
-  /* opacity: .3; */
 }
 
 #pageTitle {
@@ -30,6 +27,10 @@ body {
   width: 5rem;
   margin-left: 85vw;
   margin-bottom: 5vh;
+}
+
+.paper-btn {
+  margin-bottom: 10px;
 }
 
 /* @media screen and (min-width: 400px) {
