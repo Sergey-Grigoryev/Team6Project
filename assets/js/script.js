@@ -10,6 +10,7 @@ var trackedItem6 = document.querySelector("#trackedItem6");
 var trackedItem7 = document.querySelector("#trackedItem7");
 var trackedItem8 = document.querySelector("#trackedItem8");
 var trackedItem9 = document.querySelector("#trackedItem9");
+var trackedItem10 = document.querySelector("#trackedItem10");
 var trackedItems = [trackedItem1, trackedItem2, trackedItem3, trackedItem4, trackedItem5, trackedItem6, trackedItem7, trackedItem8, trackedItem9];
 var trackingList = [];
 
@@ -79,6 +80,7 @@ function allStorage () {
     trackedItem7.style.display = "none";
     trackedItem8.style.display = "none";
     trackedItem9.style.display = "none";
+    trackedItem10.style.display = "none";
     shoppingItem1.style.display = "none";
     shoppingItem2.style.display = "none";
     shoppingItem3.style.display = "none";
@@ -91,15 +93,23 @@ function allStorage () {
     shoppingItem10.style.display = "none";
     var keys = Object.keys(localStorage), i = keys.length;
     while (i--) {
-        console.log(keys[i]);
-        //trackingList.push({keys[i]: JSON.parse(localStorage.getItem(keys[i]))});
+        trackingList.push(JSON.parse(localStorage.getItem(keys[i])));
     };
+    console.log(trackingList);
     for (i = 0; i < trackingList.length; i++) {
+        let itemPurchDate = moment(trackingList[i].purch, 'YYYY-MM-DD');
+        let today =  moment().startOf('day');
+        let daysSince = moment.duration(today.diff(itemPurchDate)).asDays();
+        let daysTo = trackingList[i].duration * 2;
+        // if statement using moment to move to Shopping List
+        if (daysTo < daysSince) {
+            console.log("move " + trackingList[i].item + " to shopping list")
+        } else {
+            console.log("keep tracking " + trackingList[i].item)
+        }
         trackedItems[i].textContent = trackingList[i].item;
         trackedItems[i].style.display = "block";
     }
-    // if statement using moment to move to Shopping List
-
 };
 
 allStorage();
@@ -118,7 +128,7 @@ var saveItemObject;
 var saveToTrack = function() {
     saveItemName = itemName.value;
     saveItemDuration = itemDuration.value;
-    saveItemPurDate = moment().format("YYYYMMDD"); 
+    saveItemPurDate = moment().format("YYYY-MM-DD"); 
     fetch (
         `https://api.edamam.com/api/nutrition-data?app_id=48758084&app_key=0f5f4bf9a6090d0168c26196cb0a8b55&nutrition-type=logging&ingr=${saveItemName}`
         )
@@ -149,7 +159,13 @@ var saveToTrack = function() {
         });
 };
             
-
+var deleteItem = function(itemName) {
+    localStorage.removeItem(itemName);
+    trackingList = [];
+    console.log(trackingList);
+    allStorage();
+    console.log(trackingList);
+}
 
     
     
@@ -193,6 +209,9 @@ trackedItem8.addEventListener('click', function() {
 trackedItem9.addEventListener('click', function() {
     itemInfo(trackedItem9.textContent);
 })
+trackedItem10.addEventListener('click', function() {
+    itemInfo(trackedItem10.textContent);
+})
 
 // Drag & Drop Dom manipulation code:
 
@@ -231,8 +250,9 @@ for (let i = 0; i < list_items.length; i++) {
 			this.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
             if (this.id == "trashCanCard") {
                 // delete item ()
-                var deleteItem = this.textContent;
-                console.log(trackingList)
+                var itemName = this.textContent;
+                console.log(itemName.trim());
+                deleteItem(itemName.trim());
             };
 		});
 	}
