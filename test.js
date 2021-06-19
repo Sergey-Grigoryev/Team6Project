@@ -50,6 +50,7 @@ var itemInfo = function (saveItemName, trackOrShop) {
             return edamamResponse.json();
         })
         .then(function (edamamResponse) {
+            console.log(edamamResponse);
             if (trackOrShop == "track") {
                 trackedItem.textContent = saveItemName;
                 trackedItemCal.textContent = "Cal: " + edamamResponse.calories + "per serve.";
@@ -74,17 +75,36 @@ var winePair = function (saveItemName) {
             return spoonacularResponse.json();
         })
         .then(function (spoonacularResponse) {
+            console.log(spoonacularResponse);
+            console.log(spoonacularResponse.pairedWines)
+            console.log(spoonacularResponse.pairingText)
         });
 };
 
+// moves from tracking to shopping
 var trackToShopping = function (itemToShop) {
+    // for (i = 0; i < trackingList.length; i++) {
+    //     if (trackingList[i].item == itemToShop) {
+    //         shoppingList.push(trackingList[i]);
+    //         trackingList.splice(i, 1);
+    //     };
+    // };
+    // for (i = 0; i < shoppingList.length; i++) {
+    //     if (shoppingList[i].wine.length != 0) {
+    //         wineSugs.push(shoppingList[i].wine)
+    //     };
+    // };
+    // console.log(shoppingList);
     let changePurch = JSON.parse(localStorage.getItem(itemToShop));
     localStorage.removeItem(itemToShop)
+    console.log(changePurch.purch)
     changePurch.purch = "2000-01-01";
+    console.log(changePurch)
     localStorage.setItem(itemToShop, JSON.stringify(changePurch));
     location.reload();
 };
 
+// on load - get localStorage info:
 function allStorage() {
     trackedItem1.style.display = "none";
     trackedItem2.style.display = "none";
@@ -110,6 +130,8 @@ function allStorage() {
     while (i--) {
         trackingList.push(JSON.parse(localStorage.getItem(keys[i])));
     };
+    console.log(trackingList);
+    // if statement using moment to move to Shopping List
     let j = 0;
     for (i = 0; i < trackingList.length; i++) {
         let itemPurchDate = moment(trackingList[i].purch, 'YYYY-MM-DD');
@@ -119,7 +141,9 @@ function allStorage() {
         if (daysTo <= daysSince) {
             shoppingList.push(trackingList[i]);
             delete trackingList[i];
+            console.log(trackingList);
         } else {
+            console.log("keep tracking " + trackingList[i].item)
             trackedItems[j].textContent = trackingList[i].item;
             trackedItems[j].style.display = "block";
             j++;
@@ -128,8 +152,10 @@ function allStorage() {
     for (i = 0; i < trackingList.length; i++) {
         console.log(trackingList);
         if (trackingList[i]) {
+            console.log(trackingList);
         } else {
             trackingList.splice(i, 1);
+            console.log(trackingList);
         };
     };
     for (i = 0; i < shoppingList.length; i++) {
@@ -142,7 +168,14 @@ function allStorage() {
 };
 
 allStorage();
+console.log(trackingList);
+console.log(shoppingList);
+console.log(wineSugs)
+// function uses moment trackedItems > delete from tracking list > add to shoping list
+// also run when moving item
+// delete function
 
+// Save Purchased Item to tracking list:
 var saveItemName;
 var saveItemDuration;
 var saveItemPurDate;
@@ -159,6 +192,7 @@ var saveToTrack = function () {
             return edamamResponse.json();
         })
         .then(function (edamamResponse) {
+            console.log(edamamResponse);
             fetch(
                 `https://api.spoonacular.com/food/wine/pairing?food=${saveItemName}&apiKey=10758b8ba109476c9453aee7b660ad09`
             )
@@ -166,9 +200,14 @@ var saveToTrack = function () {
                     return spoonacularResponse.json();
                 })
                 .then(function (spoonacularResponse) {
+                    console.log(spoonacularResponse);
+                    console.log(spoonacularResponse.pairedWines)
+                    console.log(spoonacularResponse.pairingText)
                     saveItemObject = { 'item': saveItemName, 'duration': saveItemDuration, 'purch': saveItemPurDate, 'cal': edamamResponse.calories, 'fat': edamamResponse.totalNutrients.FAT.quantity, 'carb': edamamResponse.totalNutrients.CHOCDF.quantity, 'wine': spoonacularResponse.pairedWines };
                     localStorage.setItem(saveItemName, JSON.stringify(saveItemObject));
                     trackingList.push(saveItemObject);
+                    console.log(saveItemObject);
+                    console.log(trackingList);
                     for (i = 0; i < trackingList.length; i++) {
                         trackedItems[i].textContent = trackingList[i].item;
                         trackedItems[i].style.display = "block";
@@ -181,6 +220,10 @@ var deleteItem = function (itemName) {
     localStorage.removeItem(itemName);
     location.reload();
 }
+
+//itemInfo(saveItemName); //api call - spoonacular
+//winePair(saveItemName); //api call - Edamam
+
 
 var winePairSug = function () {
     shoppingItem.textContent = "The God of Wine suggests:";
@@ -261,6 +304,7 @@ winePairSugs.addEventListener('click', function () {
 });
 
 // Drag & Drop Dom manipulation code:
+
 const list_items = document.querySelectorAll('.paper-btn');
 const lists = document.querySelectorAll('.card');
 let draggedItem = null;
@@ -294,12 +338,36 @@ for (let j = 0; j < lists.length; j++) {
     list.addEventListener('drop', function () {
         this.append(draggedItem);
         this.style.backgroundColor = 'rgba(0, 0, 0, 0)';
-        if (this.id == "trashCanCard") {
-            var itemName = this.textContent;
-            deleteItem(itemName.trim());
-        } else if (this.id == "shoppingCard") {
-            var itemName = this.textContent.split(" ").splice(-1);
-            trackToShopping(itemName);
-        };
+    });
+}
+for (let k = 0; k < lists.length; k++) {
+    const list = lists[k];
+    list.addEventListener('dragover', function (e) {
+        e.preventDefault();
+    });
+    list.addEventListener('dragenter', function (e) {
+        e.preventDefault();
+        this.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
+    });
+    list.addEventListener('dragleave', function () {
+        this.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
+    });
+    list.addEventListener('drop', function () {
+        console.log('drop');
+        this.append(draggedItem);
+        this.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
+        draggedItem.remove('#trashCanCard');
+
+
+        // if (this.id == "trashCanCard") {
+        //     var itemName = this.textContent;
+        //     console.log(itemName.trim());
+        //     deleteItem(itemName.trim());
+        // } else if (this.id == "shoppingCard") {
+        //     var itemName = this.textContent.split(" ").splice(-1);
+        //     console.log(itemName);
+        //     trackToShopping(itemName);
+        // };
+        // draggedItem.remove('#trashCanCard');
     });
 }

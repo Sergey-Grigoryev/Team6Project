@@ -1,0 +1,60 @@
+.paper-container {
+    margin: auto;
+    width: 60%;
+    border: 3px solid rgb(65 64 62);
+    padding: 10px;
+    line-height: 60%;
+    margin-top: 10px;
+  }
+  
+  body {
+    background-color: rgb(255, 252, 221);
+  }
+  
+  #trackingCard, #shoppingCard {
+    background-image: url("../imgs/notepadImg.png");
+  }
+  
+  #pageTitle {
+    margin-top: 30px;
+  }
+  
+  #winePairSugs {
+    background-image: url(../imgs/wine.jpeg);
+    background-repeat: no-repeat;
+    background-size: 5rem;
+    width: 5rem;
+    height: 5rem;
+  }
+  
+  #trashCanCard {
+    width: 5rem;
+    margin-left: 85vw;
+    margin-bottom: 5vh;
+  }
+  
+  .paper-btn {
+    margin-bottom: 10px;
+  }
+  
+  #winePair {
+    align-self: flex-end;
+    justify-self: flex-end;
+  }
+  
+   @media screen and (max-width: 992px) {
+    .column {
+      width: 50%;
+    }
+  }
+  @media screen and (max-width: 600px) {
+  #font-size{
+    font-size: 50px;
+  }
+  #text-size{
+    font-size: 30px;
+  }
+  .column {
+      width: 100%;
+    }
+  }

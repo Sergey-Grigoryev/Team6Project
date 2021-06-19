@@ -1,14 +1,13 @@
-.child-borders {
-  margin-right: 15vw;
-}
-
-.paper-container{
-  margin: auto;
-  width: 60%;
+.paper-container {
+  width: 100%;
   border: 3px solid rgb(65 64 62);
-  padding: 10px;
+  padding: 10px auto 10px auto;
   line-height: 60%;
-  margin-top: 10px;
+  font-size: 16px;
+  text-align: center;
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 body {
@@ -16,14 +15,19 @@ body {
 }
 
 #trackingCard, #shoppingCard {
-  /* background-color: rgb(255, 245, 157); */
   background-image: url("../imgs/notepadImg.png");
-  
-  /* opacity: .3; */
 }
 
 #pageTitle {
   margin-top: 30px;
+}
+
+#winePairSugs {
+  background-image: url(../imgs/wine.jpeg);
+  background-repeat: no-repeat;
+  background-size: 5rem;
+  width: 5rem;
+  height: 5rem;
 }
 
 #trashCanCard {
@@ -32,11 +36,15 @@ body {
   margin-bottom: 5vh;
 }
 
-/* @media screen and (min-width: 400px) {
-  body {
-    background-color: rgb(243, 252, 243);
-  }
-} */
+.paper-btn {
+  margin-bottom: 10px;
+}
+
+#winePair {
+  align-self: flex-end;
+  justify-self: flex-end;
+}
+
  @media screen and (max-width: 992px) {
   .column {
     width: 50%;
@@ -52,4 +60,10 @@ body {
 .column {
     width: 100%;
   }
+.paper-container {
+  width: auto;
+  line-height: inherit;
+  display: inline-flex;
+  flex-wrap: wrap;
+}
 }
