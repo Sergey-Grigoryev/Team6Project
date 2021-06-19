@@ -150,7 +150,7 @@ function allStorage () {
         shoppingItems[i].textContent = shoppingList[i].item;
         shoppingItems[i].style.display = "block";
         if (shoppingList[i].wine.length != 0) {
-            wineSugs.push(shoppingList[i].wine)
+            wineSugs.push(shoppingList[i].item + " pairs well with: ", shoppingList[i].wine)
         };
     }
 };
@@ -217,7 +217,7 @@ var winePairSug = function() {
     shoppingItem.textContent = "The God of Wine suggests:";
     shoppingItemCal.textContent = "";
     shoppingItemFat.textContent = "Based on the items in your shopping list:";
-    shoppingItemCarb.textContent = wineSugs.join(", ");
+    shoppingItemCarb.textContent = wineSugs.join(" ");
 }
 
 // click event listener
@@ -288,12 +288,12 @@ for (let i = 0; i < list_items.length; i++) {
 			this.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
 		});
 		list.addEventListener('dragleave', function (e) {
-			this.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
+			this.style.backgroundColor = 'rgba(0, 0, 0, 0)';
 		});
 		list.addEventListener('drop', function (e) {
 			console.log(this);
 			this.append(draggedItem);
-			this.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
+			this.style.backgroundColor = 'rgba(0, 0, 0, 0)';
             if (this.id == "trashCanCard") {
                 // delete item ()
                 var itemName = this.textContent;
@@ -301,6 +301,7 @@ for (let i = 0; i < list_items.length; i++) {
                 deleteItem(itemName.trim());
                 return;
             };
+            return;
 		});
 	}
 }
