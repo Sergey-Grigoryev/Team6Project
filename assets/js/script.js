@@ -12,7 +12,6 @@ var trackedItem8 = document.querySelector("#trackedItem8");
 var trackedItem9 = document.querySelector("#trackedItem9");
 var trackedItem10 = document.querySelector("#trackedItem10");
 var trackedItems = [trackedItem1, trackedItem2, trackedItem3, trackedItem4, trackedItem5, trackedItem6, trackedItem7, trackedItem8, trackedItem9];
-var trackingList = [];
 
 var shoppingItem1 = document.querySelector("#shoppingItem1");
 var shoppingItem2 = document.querySelector("#shoppingItem2");
@@ -24,7 +23,7 @@ var shoppingItem7 = document.querySelector("#shoppingItem7");
 var shoppingItem8 = document.querySelector("#shoppingItem8");
 var shoppingItem9 = document.querySelector("#shoppingItem9");
 var shoppingItem10 = document.querySelector("#shoppingItem10");
-
+var shoppingItems = [shoppingItem1, shoppingItem2, shoppingItem3, shoppingItem4, shoppingItem5, shoppingItem6, shoppingItem7, shoppingItem8, shoppingItem9, shoppingItem10];
 var paperBtn = document.querySelector(".paper-btn");
 
 // modal
@@ -32,10 +31,17 @@ var trackedItem = document.querySelector("#trackedItem");
 var trackedItemCal = document.querySelector("#trackedItemCal");
 var trackedItemFat = document.querySelector("#trackedItemFat");
 var trackedItemCarb = document.querySelector("#trackedItemCarb");
+var shoppingItem = document.querySelector("#shoppingItem");
+var shoppingItemCal = document.querySelector("#shoppingItemCal");
+var shoppingItemFat = document.querySelector("#shoppingItemFat");
+var shoppingItemCarb = document.querySelector("#shoppingItemCarb");
+var winePairSugs = document.querySelector("#winePairSugs");
+var wineSugs = [];
+var shoppingList = [];
+var trackingList = [];
 
 // API call to nutrition facts:
     // API Key for Edamam: 0f5f4bf9a6090d0168c26196cb0a8b55	
-
 var itemInfo = function(saveItemName) {
     fetch (
     `https://api.edamam.com/api/nutrition-data?app_id=48758084&app_key=0f5f4bf9a6090d0168c26196cb0a8b55&nutrition-type=logging&ingr=${saveItemName}`
@@ -45,8 +51,10 @@ var itemInfo = function(saveItemName) {
     })
     .then(function(edamamResponse) {
         console.log(edamamResponse);
+        let itemIndex = trackingList.indexOf(saveItemName)
+        console.log(itemIndex);
         trackedItem.textContent = saveItemName;
-        trackedItemCal.textContent = "Cal: " + edamamResponse.calories + "per serve.";
+        //trackedItemCal.textContent = "Cal: " + trackingList.cal + "per serve.";
         trackedItemFat.textContent = "Fat: " + edamamResponse.totalNutrients.FAT.quantity + "g";
         trackedItemCarb.textContent = "Carb: " + edamamResponse.totalNutrients.CHOCDF.quantity + "g";
     })
@@ -68,7 +76,22 @@ var winePair = function(saveItemName) {
     });
 };
 
-// winePair("steak");
+    // moves from tracking to shopping
+var trackToShopping = function(itemToShop) {
+    for (i = 0; i < trackingList.length; i++) {
+        if (trackingList[i].item == itemToShop) {
+            shoppingList.push(trackingList[i]);
+            trackingList.splice(i, 1);
+        };
+    };
+    for (i = 0; i < shoppingList.length; i++) {
+        if (shoppingList[i].wine.length != 0) {
+            wineSugs.push(shoppingList[i].wine)
+        };
+    };
+    console.log(shoppingList);
+};
+
 // on load - get localStorage info:
 function allStorage () {
     trackedItem1.style.display = "none";
@@ -96,25 +119,46 @@ function allStorage () {
         trackingList.push(JSON.parse(localStorage.getItem(keys[i])));
     };
     console.log(trackingList);
+        // if statement using moment to move to Shopping List
+        let j = 0;
     for (i = 0; i < trackingList.length; i++) {
         let itemPurchDate = moment(trackingList[i].purch, 'YYYY-MM-DD');
         let today =  moment().startOf('day');
         let daysSince = moment.duration(today.diff(itemPurchDate)).asDays();
         let daysTo = trackingList[i].duration * 2;
-        // if statement using moment to move to Shopping List
-        if (daysTo < daysSince) {
-            console.log("move " + trackingList[i].item + " to shopping list")
+        if (daysTo <= daysSince) {
+            shoppingList.push(trackingList[i]);
+            delete trackingList[i];
+            console.log(trackingList);
         } else {
             console.log("keep tracking " + trackingList[i].item)
+            trackedItems[j].textContent = trackingList[i].item;
+            trackedItems[j].style.display = "block";
+            j++;
         }
-        trackedItems[i].textContent = trackingList[i].item;
-        trackedItems[i].style.display = "block";
+    };
+    for (i = 0; i < trackingList.length; i++) {
+        console.log(trackingList);
+        if (trackingList[i]) {
+            console.log(trackingList);
+        } else {
+            trackingList.splice(i, 1);
+            console.log(trackingList);
+        };
+    };
+    for (i = 0; i < shoppingList.length; i++) {
+        shoppingItems[i].textContent = shoppingList[i].item;
+        shoppingItems[i].style.display = "block";
+        if (shoppingList[i].wine.length != 0) {
+            wineSugs.push(shoppingList[i].wine)
+        };
     }
 };
 
 allStorage();
 console.log(trackingList);
-
+console.log(shoppingList);
+console.log(wineSugs)
 // function uses moment trackedItems > delete from tracking list > add to shoping list
 // also run when moving item
 // delete function
@@ -162,20 +206,19 @@ var saveToTrack = function() {
 var deleteItem = function(itemName) {
     localStorage.removeItem(itemName);
     trackingList = [];
-    console.log(trackingList);
     allStorage();
-    console.log(trackingList);
 }
-
-    
     
     //itemInfo(saveItemName); //api call - spoonacular
     //winePair(saveItemName); //api call - Edamam
 
 
-//saveToTrack();
-
-
+var winePairSug = function() {
+    shoppingItem.textContent = "The God of Wine suggests:";
+    shoppingItemCal.textContent = "";
+    shoppingItemFat.textContent = "Based on the items in your shopping list:";
+    shoppingItemCarb.textContent = wineSugs.join(", ");
+}
 
 // click event listener
 itemBtn.addEventListener('click', function() {
@@ -212,6 +255,9 @@ trackedItem9.addEventListener('click', function() {
 trackedItem10.addEventListener('click', function() {
     itemInfo(trackedItem10.textContent);
 })
+winePairSugs.addEventListener('click', function() {
+    winePairSug();
+});
 
 // Drag & Drop Dom manipulation code:
 
@@ -253,6 +299,7 @@ for (let i = 0; i < list_items.length; i++) {
                 var itemName = this.textContent;
                 console.log(itemName.trim());
                 deleteItem(itemName.trim());
+                return;
             };
 		});
 	}

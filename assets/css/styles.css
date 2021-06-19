@@ -23,6 +23,14 @@ body {
   margin-top: 30px;
 }
 
+#winePairSugs {
+  background-image: url(../imgs/wine.jpeg);
+  background-repeat: no-repeat;
+  background-size: 5rem;
+  width: 5rem;
+  height: 5rem;
+}
+
 #trashCanCard {
   width: 5rem;
   margin-left: 85vw;
@@ -31,6 +39,11 @@ body {
 
 .paper-btn {
   margin-bottom: 10px;
+}
+
+#winePair {
+  align-self: flex-end;
+  justify-self: flex-end;
 }
 
 /* @media screen and (min-width: 400px) {
