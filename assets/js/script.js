@@ -42,7 +42,7 @@ var trackingList = [];
 
 // API call to nutrition facts:
     // API Key for Edamam: 0f5f4bf9a6090d0168c26196cb0a8b55	
-var itemInfo = function(saveItemName) {
+var itemInfo = function(saveItemName, trackOrShop) {
     fetch (
     `https://api.edamam.com/api/nutrition-data?app_id=48758084&app_key=0f5f4bf9a6090d0168c26196cb0a8b55&nutrition-type=logging&ingr=${saveItemName}`
     )
@@ -51,30 +51,35 @@ var itemInfo = function(saveItemName) {
     })
     .then(function(edamamResponse) {
         console.log(edamamResponse);
-        let itemIndex = trackingList.indexOf(saveItemName)
-        console.log(itemIndex);
-        trackedItem.textContent = saveItemName;
-        //trackedItemCal.textContent = "Cal: " + trackingList.cal + "per serve.";
-        trackedItemFat.textContent = "Fat: " + edamamResponse.totalNutrients.FAT.quantity + "g";
-        trackedItemCarb.textContent = "Carb: " + edamamResponse.totalNutrients.CHOCDF.quantity + "g";
+        if (trackOrShop == "track") {
+            trackedItem.textContent = saveItemName;
+            trackedItemCal.textContent = "Cal: " + edamamResponse.calories + "per serve.";
+            trackedItemFat.textContent = "Fat: " + edamamResponse.totalNutrients.FAT.quantity + "g";
+            trackedItemCarb.textContent = "Carb: " + edamamResponse.totalNutrients.CHOCDF.quantity + "g";
+        } else {
+            shoppingItem.textContent = saveItemName;
+            shoppingItemCal.textContent = "Cal: " + edamamResponse.calories + "per serve.";
+            shoppingItemFat.textContent = "Fat: " + edamamResponse.totalNutrients.FAT.quantity + "g";
+            shoppingItemCarb.textContent = "Carb: " + edamamResponse.totalNutrients.CHOCDF.quantity + "g";
+        };
     })
 };
     
     // API call to Wine Paring:
        // API Key for Spoonacular: 10758b8ba109476c9453aee7b660ad09
-var winePair = function(saveItemName) {
-    fetch (
-        `https://api.spoonacular.com/food/wine/pairing?food=${saveItemName}&apiKey=10758b8ba109476c9453aee7b660ad09`
-    )
-    .then (function(spoonacularResponse) {
-        return spoonacularResponse.json();
-    })
-    .then (function (spoonacularResponse) {
-        console.log(spoonacularResponse);
-        console.log(spoonacularResponse.pairedWines)
-        console.log(spoonacularResponse.pairingText)
-    });
-};
+// var winePair = function(saveItemName) {
+//     fetch (
+//         `https://api.spoonacular.com/food/wine/pairing?food=${saveItemName}&apiKey=10758b8ba109476c9453aee7b660ad09`
+//     )
+//     .then (function(spoonacularResponse) {
+//         return spoonacularResponse.json();
+//     })
+//     .then (function (spoonacularResponse) {
+//         console.log(spoonacularResponse);
+//         console.log(spoonacularResponse.pairedWines)
+//         console.log(spoonacularResponse.pairingText)
+//     });
+// };
 
     // moves from tracking to shopping
 var trackToShopping = function(itemToShop) {
@@ -150,7 +155,7 @@ function allStorage () {
         shoppingItems[i].textContent = shoppingList[i].item;
         shoppingItems[i].style.display = "block";
         if (shoppingList[i].wine.length != 0) {
-            wineSugs.push(shoppingList[i].item + " pairs well with: ", shoppingList[i].wine)
+            wineSugs.push(shoppingList[i].item + " pairs well with: ", shoppingList[i].wine.join(", "))
         };
     }
 };
@@ -180,6 +185,7 @@ var saveToTrack = function() {
             return edamamResponse.json();
         })
         .then (function(edamamResponse) {
+            console.log(edamamResponse);
             fetch (
                 `https://api.spoonacular.com/food/wine/pairing?food=${saveItemName}&apiKey=10758b8ba109476c9453aee7b660ad09`
             )
@@ -226,35 +232,67 @@ itemBtn.addEventListener('click', function() {
 });
 
 trackedItem1.addEventListener('click', function() {
-    itemInfo(trackedItem1.textContent);
+    itemInfo(trackedItem1.textContent, "track");
 })
 trackedItem2.addEventListener('click', function() {
-    itemInfo(trackedItem2.textContent);
+    itemInfo(trackedItem1.textContent, "track");
 })
 trackedItem3.addEventListener('click', function() {
-    itemInfo(trackedItem3.textContent);
+    itemInfo(trackedItem3.textContent, "track");
 })
 trackedItem4.addEventListener('click', function() {
-    itemInfo(trackedItem4.textContent);
+    itemInfo(trackedItem4.textContent, "track");
 })
 trackedItem5.addEventListener('click', function() {
-    itemInfo(trackedItem5.textContent);
+    itemInfo(trackedItem5.textContent, "track");
 })
 trackedItem6.addEventListener('click', function() {
-    itemInfo(trackedItem6.textContent);
+    itemInfo(trackedItem6.textContent, "track");
 })
 trackedItem7.addEventListener('click', function() {
-    itemInfo(trackedItem7.textContent);
+    itemInfo(trackedItem7.textContent, "track");
 })
 trackedItem8.addEventListener('click', function() {
-    itemInfo(trackedItem8.textContent);
+    itemInfo(trackedItem8.textContent, "track");
 })
 trackedItem9.addEventListener('click', function() {
-    itemInfo(trackedItem9.textContent);
+    itemInfo(trackedItem9.textContent, "track");
 })
 trackedItem10.addEventListener('click', function() {
-    itemInfo(trackedItem10.textContent);
+    itemInfo(trackedItem10.textContent, "track");
 })
+
+shoppingItem1.addEventListener('click', function() {
+    itemInfo(shoppingItem1.textContent, "shop");
+})
+shoppingItem2.addEventListener('click', function() {
+    itemInfo(shoppingItem2.textContent, "shop");
+})
+shoppingItem3.addEventListener('click', function() {
+    itemInfo(shoppingItem3.textContent, "shop");
+})
+shoppingItem4.addEventListener('click', function() {
+    itemInfo(shoppingItem4.textContent, "shop");
+})
+shoppingItem5.addEventListener('click', function() {
+    itemInfo(shoppingItem5.textContent, "shop");
+})
+shoppingItem6.addEventListener('click', function() {
+    itemInfo(shoppingItem6.textContent, "shop");
+})
+shoppingItem7.addEventListener('click', function() {
+    itemInfo(shoppingItem7.textContent, "shop");
+})
+shoppingItem8.addEventListener('click', function() {
+    itemInfo(shoppingItem8.textContent, "shop");
+})
+shoppingItem9.addEventListener('click', function() {
+    itemInfo(shoppingItem9.textContent, "shop");
+})
+shoppingItem10.addEventListener('click', function() {
+    itemInfo(shoppingItem10.textContent, "shop");
+})
+
 winePairSugs.addEventListener('click', function() {
     winePairSug();
 });
