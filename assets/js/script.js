@@ -322,7 +322,6 @@ for (let i = 0; i < list_items.length; i++) {
 			draggedItem = null;
 		}, 0);
 	})
-
 }
 for (let j = 0; j < lists.length; j ++) {
     const list = lists[j];
