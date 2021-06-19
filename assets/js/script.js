@@ -83,18 +83,25 @@ var itemInfo = function(saveItemName, trackOrShop) {
 
     // moves from tracking to shopping
 var trackToShopping = function(itemToShop) {
-    for (i = 0; i < trackingList.length; i++) {
-        if (trackingList[i].item == itemToShop) {
-            shoppingList.push(trackingList[i]);
-            trackingList.splice(i, 1);
-        };
-    };
-    for (i = 0; i < shoppingList.length; i++) {
-        if (shoppingList[i].wine.length != 0) {
-            wineSugs.push(shoppingList[i].wine)
-        };
-    };
-    console.log(shoppingList);
+    // for (i = 0; i < trackingList.length; i++) {
+    //     if (trackingList[i].item == itemToShop) {
+    //         shoppingList.push(trackingList[i]);
+    //         trackingList.splice(i, 1);
+    //     };
+    // };
+    // for (i = 0; i < shoppingList.length; i++) {
+    //     if (shoppingList[i].wine.length != 0) {
+    //         wineSugs.push(shoppingList[i].wine)
+    //     };
+    // };
+    // console.log(shoppingList);
+    let changePurch = JSON.parse(localStorage.getItem(itemToShop));
+    localStorage.removeItem(itemToShop)
+    console.log(changePurch.purch)
+    changePurch.purch = "2000-01-01";
+    console.log(changePurch)
+    localStorage.setItem(itemToShop, JSON.stringify(changePurch));
+    location.reload();
 };
 
 // on load - get localStorage info:
@@ -140,7 +147,7 @@ function allStorage () {
             trackedItems[j].textContent = trackingList[i].item;
             trackedItems[j].style.display = "block";
             j++;
-        }
+        };
     };
     for (i = 0; i < trackingList.length; i++) {
         console.log(trackingList);
@@ -157,7 +164,7 @@ function allStorage () {
         if (shoppingList[i].wine.length != 0) {
             wineSugs.push(shoppingList[i].item + " pairs well with: ", shoppingList[i].wine.join(", "))
         };
-    }
+    };
 };
 
 allStorage();
@@ -211,8 +218,7 @@ var saveToTrack = function() {
             
 var deleteItem = function(itemName) {
     localStorage.removeItem(itemName);
-    trackingList = [];
-    allStorage();
+    location.reload();
 }
     
     //itemInfo(saveItemName); //api call - spoonacular
@@ -316,31 +322,31 @@ for (let i = 0; i < list_items.length; i++) {
 			draggedItem = null;
 		}, 0);
 	})
-	for (let j = 0; j < lists.length; j ++) {
-		const list = lists[j];
-		list.addEventListener('dragover', function (e) {
-			e.preventDefault();
-		});
-		list.addEventListener('dragenter', function (e) {
-			e.preventDefault();
-			this.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
-		});
-		list.addEventListener('dragleave', function (e) {
-			this.style.backgroundColor = 'rgba(0, 0, 0, 0)';
-		});
-		list.addEventListener('drop', function (e) {
-			console.log(this);
-			this.append(draggedItem);
-			this.style.backgroundColor = 'rgba(0, 0, 0, 0)';
-            if (this.id == "trashCanCard") {
-                // delete item ()
-                var itemName = this.textContent;
-                console.log(itemName.trim());
-                deleteItem(itemName.trim());
-                return;
-            };
-            return;
-		});
-	}
-}
 
+}
+for (let j = 0; j < lists.length; j ++) {
+    const list = lists[j];
+    list.addEventListener('dragover', function (e) {
+        e.preventDefault();
+    });
+    list.addEventListener('dragenter', function (e) {
+        e.preventDefault();
+        this.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
+    });
+    list.addEventListener('dragleave', function (e) {
+        this.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+    });
+    list.addEventListener('drop', function (e) {
+        this.append(draggedItem);
+        this.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+        if (this.id == "trashCanCard") {
+            var itemName = this.textContent;
+            console.log(itemName.trim());
+            deleteItem(itemName.trim());
+        } else if (this.id == "shoppingCard") {
+            var itemName = this.textContent.split(" ").splice(-1);
+            console.log(itemName);
+            trackToShopping(itemName);
+        };
+    });
+}
