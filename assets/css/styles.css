@@ -1,13 +1,7 @@
 .paper-container {
-  width: 100%;
   border: 3px solid rgb(65 64 62);
-  padding: 10px auto 10px auto;
   line-height: 60%;
-  font-size: 16px;
   text-align: center;
-  display: inline-flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
 }
 
 body {
