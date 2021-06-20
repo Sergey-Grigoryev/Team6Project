@@ -75,9 +75,44 @@ var winePair = function (saveItemName) {
         })
         .then(function (spoonacularResponse) {
         });
+  
+    // API Key for Edamam: 0f5f4bf9a6090d0168c26196cb0a8b55	
+var itemInfo = function(saveItemName, trackOrShop) {
+    fetch (
+    `https://api.edamam.com/api/nutrition-data?app_id=48758084&app_key=0f5f4bf9a6090d0168c26196cb0a8b55&nutrition-type=logging&ingr=${saveItemName}`
+    )
+    .then (function(edamamResponse) {
+        return edamamResponse.json();
+    })
+    .then(function(edamamResponse) {
+        console.log(edamamResponse);
+        if (trackOrShop == "track") {
+            trackedItem.textContent = saveItemName;
+            trackedItemCal.textContent = "Cal: " + edamamResponse.calories + "per serve.";
+            trackedItemFat.textContent = "Fat: " + edamamResponse.totalNutrients.FAT.quantity + "g";
+            trackedItemCarb.textContent = "Carb: " + edamamResponse.totalNutrients.CHOCDF.quantity + "g";
+        } else {
+            shoppingItem.textContent = saveItemName;
+            shoppingItemCal.textContent = "Cal: " + edamamResponse.calories + "per serve.";
+            shoppingItemFat.textContent = "Fat: " + edamamResponse.totalNutrients.FAT.quantity + "g";
+            shoppingItemCarb.textContent = "Carb: " + edamamResponse.totalNutrients.CHOCDF.quantity + "g";
+        };
+    })
 };
+    
+    // API call to Wine Paring:
+       // API Key for Spoonacular: 10758b8ba109476c9453aee7b660ad09
+var winePair = function(saveItemName) {
+   fetch (       `https://api.spoonacular.com/food/wine/pairing?food=${saveItemName}&apiKey=10758b8ba109476c9453aee7b660ad09`
+   )
+     .then (function(spoonacularResponse) {
+         return spoonacularResponse.json();
+     })
+     .then (function (spoonacularResponse) {
+     });
+ };
 
-var trackToShopping = function (itemToShop) {
+var trackToShopping = function(itemToShop) {
     let changePurch = JSON.parse(localStorage.getItem(itemToShop));
     localStorage.removeItem(itemToShop)
     changePurch.purch = "2000-01-01";
@@ -110,6 +145,7 @@ function allStorage() {
     while (i--) {
         trackingList.push(JSON.parse(localStorage.getItem(keys[i])));
     };
+  
     let j = 0;
     for (i = 0; i < trackingList.length; i++) {
         let itemPurchDate = moment(trackingList[i].purch, 'YYYY-MM-DD');
@@ -124,14 +160,14 @@ function allStorage() {
             trackedItems[j].style.display = "block";
             j++;
         };
-    };
+      
     for (i = 0; i < trackingList.length; i++) {
-        console.log(trackingList);
         if (trackingList[i]) {
         } else {
             trackingList.splice(i, 1);
         };
     };
+      
     for (i = 0; i < shoppingList.length; i++) {
         shoppingItems[i].textContent = shoppingList[i].item;
         shoppingItems[i].style.display = "block";
@@ -182,7 +218,8 @@ var deleteItem = function (itemName) {
     location.reload();
 }
 
-var winePairSug = function () {
+
+var winePairSug = function() {
     shoppingItem.textContent = "The God of Wine suggests:";
     shoppingItemCal.textContent = "";
     shoppingItemFat.textContent = "Based on the items in your shopping list:";
@@ -256,7 +293,7 @@ shoppingItem10.addEventListener('click', function () {
     itemInfo(shoppingItem10.textContent, "shop");
 })
 
-winePairSugs.addEventListener('click', function () {
+winePairSugs.addEventListener('click', function() {
     winePairSug();
 });
 

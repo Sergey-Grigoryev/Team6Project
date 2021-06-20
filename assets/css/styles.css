@@ -8,8 +8,7 @@ body {
   background-color: rgb(255, 252, 221);
 }
 
-#trackingCard,
-#shoppingCard {
+#trackingCard, #shoppingCard {
   background-image: url("../imgs/notepadImg.png");
 }
 
@@ -39,6 +38,7 @@ body {
   align-self: flex-end;
   justify-self: flex-end;
 }
+
 
 @media screen and (max-width: 992px) {
   .column {
