@@ -5,17 +5,18 @@
 ## Additionally, once items are in the shopping list, and API call returns the best wines that pair well with each item. The user can see suggestions from "The god of wine" based on what is in their shopping list. The user can also click on each item to get some of its nutrition facts (cal, fat, carbs).
 
 ### Technologies used:
-* HTML
-* CSS
-* JavaScript
-* PaperCSS
-* MomentJS
-* 2 Server-side APIs (Spoonacular, Edamam)
+
+- HTML
+- CSS
+- JavaScript
+- PaperCSS
+- MomentJS
+- 2 Server-side APIs (Spoonacular, Edamam)
 
 ### Team:
-* Rayell McMahan
-* Tho Dang
-* Jay Chen
-* Sergey Grigoryev
 
-![Screenshot of site](./assets/imgs/SiteSS.png)
+- Rayell McMahan
+- Tho Dang
+- Jay Chen
+- Sergey Grigoryev
+  ![Screenshot of site](./assets/imgs/SiteSS.png)
