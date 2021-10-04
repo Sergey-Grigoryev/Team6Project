@@ -1,4 +1,4 @@
-# Team6Project
+# Automated Shopping List
 
 ## This is an automated shopping list that alerts you without you having to check your fridge for what you need. You simply put an item on the list and an estimated time of how long it lasts you. Near the end of your selected duration of the item, items will automatically be added to your shopping list. You also have the option to manually add items from the tracking list to the active shopping list, as well as deleteing items you may not need anymore.
 
